@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Job Compressor</title>
+    <style>
+        :root { --primary: #6366f1; --bg: #0f172a; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg); color: white;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; margin: 0;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px; border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center; width: 90%; max-width: 400px;
+        }
+        h2 { color: #818cf8; margin-bottom: 10px; }
+        .upload-area {
+            border: 2px dashed #475569;
+            padding: 20px; border-radius: 15px;
+            margin: 20px 0; transition: 0.3s;
+        }
+        .upload-area:hover { border-color: var(--primary); }
+        button {
+            background: var(--primary); color: white;
+            border: none; padding: 12px 25px;
+            border-radius: 12px; font-weight: bold;
+            cursor: pointer; width: 100%; font-size: 16px;
+        }
+        button:active { transform: scale(0.98); }
+        #preview { width: 100px; border-radius: 8px; margin-top: 15px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Job Photo Resizer ⚡</h2>
+        <p style="color: #94a3b8;">Govt Jobs ke liye photo compress karein</p>
+        
+        <div class="upload-area">
+            <input type="file" id="imageInput" accept="image/*" style="display:none">
+            <label for="imageInput" style="cursor:pointer">📁 Click to Upload Photo</label>
+            <br>
+            <img id="preview" src="" alt="Preview">
+        </div>
+
+        <button onclick="compressNow()">Compress to 20KB</button>
+        <p id="status" style="margin-top: 15px; font-size: 14px;"></p>
+    </div>
+
+    <script>
+        // Preview dikhane ke liye
+        document.getElementById('imageInput').onchange = function(e) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(e.target.files[0]);
+            preview.style.display = 'inline-block';
+        };
+
+        function compressNow() {
+            document.getElementById('status').innerText = "Processing... (Logic is loading)";
+            // Agle step mein hum real compression library add karenge
+        }
+    <<script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+
+<script>
+    async function compressNow() {
+        const imageFile = document.getElementById('imageInput').files[0];
+        const status = document.getElementById('status');
+        
+        if (!imageFile) {
+            alert("Pehle ek photo select karein!");
+            return;
+        }
+
+        status.innerText = "Compressing... Please wait ⏳";
+
+        const options = {
+            maxSizeMB: 0.02, // 20KB target
+            maxWidthOrHeight: 1920,
+            useWebWorker: true
+        }
+
+        try {
+            const compressedFile = await imageCompression(imageFile, options);
+            status.innerHTML = `✅ Done! New Size: ${(compressedFile.size / 1024).toFixed(2)} KB`;
+            
+            // Download button banana
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(compressedFile);
+            downloadLink.download = "compressed_image.jpg";
+            downloadLink.innerHTML = "<br><button style='background:#22c55e; margin-top:10px;'>Download Image</button>";
+            status.appendChild(downloadLink);
+            
+        } catch (error) {
+            status.innerText = "Error: Kuch galat ho gaya!";
+            console.log(error);
+        }
+    }
+</script>
+>
+</body>
+</html>
+
